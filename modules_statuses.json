@@ -1,0 +1,6 @@
+{
+    "User": true,
+    "Account": true,
+    "Historic": true,
+    "Transaction": true
+}

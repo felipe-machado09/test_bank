@@ -1,0 +1,57 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: test_bank
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: testbank
+    container_name: testbank-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - testbank
+
+  db:
+    image: mysql:5.7
+    container_name: testbank-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: test_bank
+      MYSQL_ROOT_PASSWORD: test_bank
+      MYSQL_PASSWORD: test_bank
+      MYSQL_USER: test_bank
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/mysql/init_db.sql
+    networks:
+      - testbank
+  adminer:
+    image: adminer
+    container_name: testbank-adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - testbank
+
+  nginx:
+    image: nginx:alpine
+    container_name: testbank-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - testbank
+
+networks:
+  testbank:
+    driver: bridge

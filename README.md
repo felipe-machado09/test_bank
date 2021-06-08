@@ -1,62 +1,180 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<p align="center"><img src="https://avatars.githubusercontent.com/u/30176402?v=4" width="200"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Felipe Machado Teotonio
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Ola sou o Felipe Machado Teotonio esse é um teste para transferência entre usuários, segue o tutorial abaixo.
+- Email: felipe_machado09@hotmail.com <br />
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Renomeie o arquivo **.env.example** para apenas **.env**
 
-## Learning Laravel
+- Iniciando os containers.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+	```sh
+	docker-compose up -d
+	```
+<br>
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Entrando no container.
 
-## Laravel Sponsors
+	```sh
+	docker exec -it testbank-app /bin/bash
+	```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+<br>
 
-### Premium Partners
+- Instalando dependencias via Composer.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+	```sh
+	composer install
+	```
 
-## Contributing
+<br>
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Instalando as tabelas.
+```sh
+php artisan migrate
+```
+<br>
 
-## Code of Conduct
+- Populando o banco com 100 usuários Fakes.
+```sh
+php artisan module:seed
+```
+<br />
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Realizando Tests Unitários.
+```sh
+php artisan test
+```
+<br />
 
-## Security Vulnerabilities
+- Estou utilizando o insomnia o arquivo com as APIS esta no projeto com o nome de **test_bank.json**.
+- Pegar este Arquivo e **importe no insomnia** e tera todas as apis.
+  
+  <br />
+### Após popular o banco vamos fazer o login com os dados abaixo
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+  <br />
 
-## License
+```sh
+http://localhost:8080/
+Sistema: MySql
+Servidor: db
+Usuário: root
+Senha: test_bank
+Base de dados: test_bank
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+  <br />
+
+- vá em usuários e pegue um email que esteja cadastrado.
+- vá na API de login do insomnia e digite o email e a senha padrão : 123456
+- Após fazer login pegar o **token gerado** e cadastrar nas variaveis do insomnia.
+- e utilize o insomnia para navegar pelas Apis do test_bank.
+
+## APIS
+
+### Login & Logout
+
+| Metodo  | API | Descrição |
+| ------------- | ------------- |------------- |
+| POST  | api/auth/login  | Login no sistema |
+| POST  | api/auth/logout  | Logout no sistema |
+
+```sh
+POST - api/auth/login
+{
+    "email": "email@example.com",
+    "password": "123456",
+}
+```
+ 
+### User
+
+| Metodo  | API | Descrição |
+| ------------- | ------------- |------------- |
+| GET  | api/user  | Listagem com paginação |
+| GET  | api/user/list  | Listagem sem paginação |
+| POST  | api/user  | Cadastro de Usuário |
+| GET  | api/user/show/**{id}**  | Pega o Usuário pelo **{id}** |
+| PUT  | api/user/update/**{id}** | Atualização do usuário pelo **{id}** |
+| DELETE  | api/user/inactivate/**{id}**  | Deleção de usuário pelo **{id}** |
+
+```sh
+POST - api/user | UPDATE - api/user/update/{id}
+{
+	"name": "Felipe",
+	"email": "felipe.net.09@hotmail.com",
+	"password": "123456",
+	"cpf":"37140405875",
+	"cnpj":"62737065000171",
+	"type_user":"Customer" or "Shopman"
+}
+```
+### Transação
+
+| Metodo  | API | Descrição |
+| ------------- | ------------- |------------- |
+| GET  | api/transaction  | Listagem com paginação |
+| GET  | api/transaction/list  | Listagem sem paginação |
+| POST  | api/transaction  | Cadastro de Transação |
+| GET  | api/transaction/show/**{id}**  | Pega o Usuário pelo **{id}** |
+| PUT  | api/transaction/update/**{id}**  | Atualização do usuário pelo **{id}** |
+| DELETE  | api/transaction/inactivate/**{id}**  | Deleção de usuário pelo **{id}** |
+
+```sh
+POST - api/transaction | UPDATE - api/transaction/update/{id}
+{
+	"payer_id": 11,
+	"payee_id": 66,
+	"value": 1500.00,
+	"type_transaction":"Transfer"
+}
+```
+### Conta
+
+| Metodo  | API | Descrição |
+| ------------- | ------------- |------------- |
+| GET  | api/account  | Listagem com paginação |
+| GET  | api/account/list  | Listagem sem paginação |
+| POST  | api/account  | Cadastro de Conta |
+| GET  | api/account/show/**{id}**  | Pega o Usuário pelo **{id}** |
+| PUT  | api/account/update/**{id}**  | Logout no sistema |
+| DELETE  | api/account/inactivate/**{id}**  | Deleção de usuário pelo **{id}** |
+
+```sh
+POST - api/account | UPDATE - api/account/update/{id}
+{
+	"payer_id": 11,
+	"payee_id": 66,
+	"value": 1500.00,
+	"type_transaction":"Transfer"
+}
+```
+
+### Histórico
+
+| Metodo  | API | Descrição |
+| ------------- | ------------- |------------- |
+| GET  | api/historic  | Listagem com paginação |
+| GET  | api/historic/list  | Listagem sem paginação |
+| POST  | api/historic  | Cadastro de Histórico |
+| GET  | api/historic/show/**{id}**  | Pega o histórico pelo **{id}** |
+| PUT  | api/historic/update/**{id}**  | Atualização do histórico pelo **{id}** |
+| DELETE  | api/historic/inactivate/**{id}**  | Deleção de histórico pelo **{id}** |
+
+```sh
+POST - api/historic | UPDATE - api/historic/update/{id}
+{
+	"account_id": 3,
+	"payer_id": 66,
+	"payee_id": 33,
+	"previous_balance": 556.00,
+	"future_balance": 556.00,
+	"value": 556.00,
+	"type_historic": "Transfer"
+}
+```
+
